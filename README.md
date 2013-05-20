@@ -1,4 +1,4 @@
-#Awesome scaffold for DJANDO 1.5+ projects
+#Awesome scaffold for DJANGO 1.5+ projects
 ###Instalation
 *pip install django_scaffold*
 ###Usage
