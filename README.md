@@ -11,8 +11,8 @@ The example above will create a follow model
 
 `class Post(models.Models):
     title = models.CharField(max_length=100)
-    body = models.BooleanField()
-
+    body = models.BooleanField()`
+`
     def __unicode__(self):
         return self.title
 `
