@@ -79,3 +79,7 @@ The example above will create a follow code and files
 1. Fork it!
 2. Do things!
 3. pull request me!
+
+####Contact
+
+juliocsmelo@gmail.com
