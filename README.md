@@ -4,5 +4,5 @@
 ##Instalation
 pip install django_scaffold
 ##Usage
-python manager.py scaffold post Post title:string body:text
+>python manager.py scaffold post Post title:string body:text
 active:boolean
