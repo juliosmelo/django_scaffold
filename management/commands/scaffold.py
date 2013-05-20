@@ -24,7 +24,7 @@ class Command(BaseCommand):
             form_file.write('from .models import {0}\n\n'.format(klass.capitalize()))
             form_file.write('class {0}(forms.ModelForm):\n'.format(klass.capitalize()))
             form_file.write(PEP8_INDENT+'class Meta:\n')
-            form_file.write(PEP8_INDENT*2+'model={0}()\n'.format(klass.capitalize()))
+            form_file.write(PEP8_INDENT*2+'model={0}\n'.format(klass.capitalize()))
         form_file.close()
         return
 

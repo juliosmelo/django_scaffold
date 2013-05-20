@@ -27,7 +27,7 @@ The example above will create a follow code and files
             return self.title
 
         def get_absolute_url(self):
-            return reverse('')
+            return reverse('post_detail_path', kwargs={'pk' : self.pk })
 
 >post/views.py
 
