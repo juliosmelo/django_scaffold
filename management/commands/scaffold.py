@@ -81,7 +81,7 @@ class Command(BaseCommand):
                 urls_file.write(PEP8_INDENT+"url(r'{app}/{url}', {klass}{gview}.as_view(), name='{app}_{url_name}'),\n".format(app=app_name, klass=klass.capitalize(), gview=k, url=v['url'], url_name=v['name']))
             urls_file.write(')\n')
         urls_file.close()
-        return
+        return81
 
     def get_field_type(self, ftype):
         return FIELD_TYPES.get(ftype)

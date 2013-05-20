@@ -65,7 +65,17 @@ The example above will create a follow code and files
         url(r'post/(?P<pk>\d+)/$', PostDetailView.as_view(), name='post_detail_path'),
     )
 
+>post/forms.py
+
+    from django import forms
+
+    class PostForm(forms.ModelForm):
+        class Meta:
+            model = Post
+
 
 
 ###Contribute
-
+1. Fork it!
+2. Do things!
+3. pull request me!
