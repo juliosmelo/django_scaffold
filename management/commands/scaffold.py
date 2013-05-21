@@ -14,17 +14,13 @@ class Command(BaseCommand):
             os.makedirs(app_path)
             self.stdout.write('Creating project scaffold...')
             self.create_project_scaffold(app_path, app_name)
-            self.stdout.write('Creating forms.py...')
             self.create_form(app_path, klass)
-            self.stdout.write('Creating models.py...')
             self.create_model(app_path, klass, args)
-            self.stdout.write('Create views.py...')
             self.create_views(app_path, klass)
-            self.stdout.write('Create urls.py...')
             self.create_urls(app_path, app_name, klass)
-            self.stdout.write('Appendig app urls.py to project urls.py...')
             self.add_appurl_to_urlspy(app_name)
             self.create_adminpy(app_path, klass)
+            self.create_list_view(app_path, klass, app_name, args)
             self.stdout.write('Done!')
         except OSError:
             raise CommandError('App already exists!')
@@ -76,12 +72,6 @@ class Command(BaseCommand):
                 view_file.write(PEP8_INDENT+'model = {0}\n\n'.format(klass.capitalize()))
         return
 
-    def create_generic_template(self, app_path, app_name, klass):
-        templates_path = os.path.join(app_path, templates, app_name)
-        for template in GENERIC_TEMPLATE_NAMES:
-            with open() as template_file:
-                pass
-        return
 
     def create_adminpy(sefl, app_path, klass):
         with open(os.path.join(app_path, 'admin.py'), 'w') as admin_file:
@@ -115,3 +105,21 @@ class Command(BaseCommand):
 
     def get_field_type(self, ftype):
         return FIELD_TYPES.get(ftype)
+
+    #views
+    def create_list_view(self, app_path, klass, app_name, args):
+        template_path = os.path.join(app_path, 'templates', app_name)
+        template_name = '{0}_list.html'.format(klass)
+        with open(os.path.join(template_path, template_name.lower()), 'w' ) as tpl_file:
+            tpl_file.write('{% load i18n %}\n')
+            tpl_file.write('<h2>{klass}</h2>\n'.format(klass=klass))
+            tpl_file.write('\t<ul syle="list-style:inline;">\n')
+            tpl_file.write('\t\t{% for object in object_list %}\n')
+            _attrs = map(lambda attr: attr.split(':')[0], args)
+            for attr in _attrs:
+                tpl_file.write('\t\t\t<li>{{ object.'+attr+' }}</li>\n')
+            tpl_file.write('\t\t{% endfor %}\n')
+            tpl_file.write('\t</ul>\n')
+            tpl_file.write("<a href={% url '{0}_create_path' %}>{% trans 'Save' %}</a>".format(app_name))
+        tpl_file.close()
+        return
