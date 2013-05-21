@@ -30,8 +30,8 @@ GENERIC_TEMPLATE_NAMES = ['_create_form.html', '_update_form.html', '_confirm_de
 
 URLS_PATH = {'DetailView': {'url':'(?P<pk>\d+)/$', 'name':'detail_path'},
              'CreateView': {'url':'add/$', 'name': 'create_path'},
-             'UpdateView': {'url':'(?<pk>\d+)/edit/$', 'name': 'update_path'},
-             'DeleteView': {'url':'(?<pk>\d+)/delete/$','name':'delete_path'},
+             'UpdateView': {'url':'(?P<pk>\d+)/edit/$', 'name': 'update_path'},
+             'DeleteView': {'url':'(?P<pk>\d+)/delete/$','name':'delete_path'},
              'ListView' :  {'url' : '$', 'name': 'index_path'}
 }
 

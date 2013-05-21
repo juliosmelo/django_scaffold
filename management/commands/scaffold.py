@@ -12,12 +12,19 @@ class Command(BaseCommand):
 	    top_dir = os.getcwd()
 	    app_path = os.path.join(top_dir, app_name)
             os.makedirs(app_path)
+            self.stdout.write('Creating project scaffold...')
             self.create_project_scaffold(app_path, app_name)
+            self.stdout.write('Creating forms.py...')
             self.create_form(app_path, klass)
+            self.stdout.write('Creating models.py...')
             self.create_model(app_path, klass, args)
+            self.stdout.write('Create views.py...')
             self.create_views(app_path, klass)
+            self.stdout.write('Create urls.py...')
             self.create_urls(app_path, app_name, klass)
+            self.stdout.write('Appendig app urls.py to project urls.py...')
             self.add_appurl_to_urlspy(app_name)
+            self.stdout.write('Done!')
         except OSError:
             raise CommandError('App already exists!')
 
@@ -50,12 +57,11 @@ class Command(BaseCommand):
         model_file.close()
         return
     def create_project_scaffold(self, app_path, app_name):
-        self.stdout.write('Creating project folders')
         folders=['static/{0}/css/'.format(app_name),'static/{0}/javascript'.format(app_name.lower()),
                  'static/{0}/images'.format(app_name), 'templates/{0}'.format(app_name.lower())]
         for folde in folders:
             os.makedirs(os.path.join(app_path, folde))
-        return self.stdout.write('Done!')
+        return
 
     def create_views(self, app_path, klass):
         with open(os.path.join(app_path, 'views.py'), 'w') as view_file:
@@ -90,7 +96,7 @@ class Command(BaseCommand):
     def add_appurl_to_urlspy(self, app_name):
         #get project urls.py
         with open(os.path.join(os.getcwd(), self.project_name, 'urls.py'), 'a') as urlspy_file:
-            urlspy_file.write("urlpatterns += patterns(url(r'{app}', include('{project}.{app}.urls')))\n".format(project=self.project_name,app=app_name))
+            urlspy_file.write("urlpatterns += patterns(url(r'{app}', include('{app}.urls')))\n".format(app=app_name))
         urlspy_file.close()
         return
 
