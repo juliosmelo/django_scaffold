@@ -24,10 +24,10 @@ class Command(BaseCommand):
             self.create_urls(app_path, app_name, klass)
             self.stdout.write('Appendig app urls.py to project urls.py...')
             self.add_appurl_to_urlspy(app_name)
+            self.create_adminpy(app_path, klass)
             self.stdout.write('Done!')
         except OSError:
             raise CommandError('App already exists!')
-
 
 
     def create_form(self, app_path, klass):
@@ -56,11 +56,14 @@ class Command(BaseCommand):
             model_file.write(PEP8_INDENT*2+"return reverse('%s_detail_path', kwargs={'pk': self.pk})\n\n"%(klass.lower()))
         model_file.close()
         return
+
     def create_project_scaffold(self, app_path, app_name):
         folders=['static/{0}/css/'.format(app_name),'static/{0}/javascript'.format(app_name.lower()),
                  'static/{0}/images'.format(app_name), 'templates/{0}'.format(app_name.lower())]
         for folde in folders:
             os.makedirs(os.path.join(app_path, folde))
+        with open(os.path.join(app_path, '__init__.py'), 'w') as f:
+            f.close()
         return
 
     def create_views(self, app_path, klass):
@@ -80,6 +83,16 @@ class Command(BaseCommand):
                 pass
         return
 
+    def create_adminpy(sefl, app_path, klass):
+        with open(os.path.join(app_path, 'admin.py'), 'w') as admin_file:
+            admin_file.write('from django.contrib import admin\n')
+            admin_file.write('from .models import {0}\n\n'.format(klass))
+            admin_file.write('admin.site.register({0})\n'.format(klass))
+        admin_file.close()
+        return
+
+
+
     def create_urls(self, app_path, app_name, klass):
         with open(os.path.join(app_path, 'urls.py'), 'w') as urls_file:
             urls_file.write('from django.conf.urls import patterns, url\n')
@@ -96,7 +109,7 @@ class Command(BaseCommand):
     def add_appurl_to_urlspy(self, app_name):
         #get project urls.py
         with open(os.path.join(os.getcwd(), self.project_name, 'urls.py'), 'a') as urlspy_file:
-            urlspy_file.write("urlpatterns += patterns(url(r'{app}', include('{app}.urls')))\n".format(app=app_name))
+            urlspy_file.write("urlpatterns += patterns('',\n{pep8}url(r'^{app}/', include('{app}.urls'))\n)".format(app=app_name, pep8=PEP8_INDENT))
         urlspy_file.close()
         return
 
