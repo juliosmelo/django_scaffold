@@ -10,7 +10,7 @@
 
 The code above will generate a django app with model, views and urls path.
 
-The example above will create a follow code and files
+The example above will create the codes and files bellow
 
 >post/models.py
 
@@ -19,6 +19,7 @@ The example above will create a follow code and files
 
 
     class Post(models.Models):
+        created_at = models.DateTimeField(auto_add_now=True)
         title = models.CharField(max_length=100)
         body = models.TextField()
         active = models.BooleanField()
@@ -78,8 +79,7 @@ The example above will create a follow code and files
 ###Contribute
 1. Fork it!
 2. Do things!
-3. pull request me!
+3. pull request!
 
 ####Contact
-
 juliocsmelo@gmail.com
