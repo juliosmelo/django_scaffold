@@ -79,7 +79,7 @@ class Command(BaseCommand):
             urls_file.write('from django.conf.urls import patterns, url\n')
             generic_views_list = [k for k, v in URLS_PATH.items()]
             generic_views = map(lambda u:'{0}{1}'.format(klass.capitalize(), u), generic_views_list)
-            urls_file.write('from .views import {0}\n\n'.format((',').join(generic_views)))
+            urls_file.write('from .views import {0}\n\n'.format((', ').join(generic_views)))
             urls_file.write("urlpatterns = patterns('', \n")
             for k,v in URLS_PATH.items():
                 urls_file.write(PEP8_INDENT+"url(r'{app}/{url}', {klass}{gview}.as_view(), name='{app}_{url_name}'),\n".format(app=app_name, klass=klass.capitalize(), gview=k, url=v['url'], url_name=v['name']))
