@@ -34,6 +34,7 @@ The example above will create the codes and files bellow
 
     from .models import Post
     from django.view.generic.detail import DetailView
+    from django.core.urlresolvers import reverse_lazy
     from django.view.generic.list import ListView
     from django.view.generic.edit import CreateView, UpdateView, DeleteView
 
@@ -48,6 +49,7 @@ The example above will create the codes and files bellow
 
     class PostDeleteView(DeleteView):
         model = Post
+        success_url = reverse_lazy('post_index_path')
 
     class PostListView(ListView):
         model = Post
@@ -59,21 +61,30 @@ The example above will create the codes and files bellow
     from .views import *
 
     urlspatterns = patterns('',
-        url(r'post/(?<pk>\d+)/edit/$', PostUpdateView.as_view(), name='post_update_path'),
-        url(r'post/(?<pk>\d+)/delete/$', PostDeleteView.as_view(), name='post_delete_path'),
-        url(r'post/$', PostListView.as_view(), name='post_index_path'),
-        url(r'post/add/$', PostCreateView.as_view(), name='post_create_path'),
-        url(r'post/(?P<pk>\d+)/$', PostDetailView.as_view(), name='post_detail_path'),
+        url(r'(?<pk>\d+)/edit/$', PostUpdateView.as_view(), name='post_update_path'),
+        url(r'(?<pk>\d+)/delete/$', PostDeleteView.as_view(), name='post_delete_path'),
+        url(r'^$', PostListView.as_view(), name='post_index_path'),
+        url(r'add/$', PostCreateView.as_view(), name='post_create_path'),
+        url(r'(?P<pk>\d+)/$', PostDetailView.as_view(), name='post_detail_path'),
     )
 
 >post/forms.py
 
     from django import forms
+    from .models import Post
 
     class PostForm(forms.ModelForm):
         class Meta:
             model = Post
 
+
+>post/templates/post/post_detail.html
+
+>post/templates/post/post_form.html
+
+>post/templates/post/post_list.html
+
+>post/templates/post/post_confirm_delete.html
 
 
 ###Contribute
