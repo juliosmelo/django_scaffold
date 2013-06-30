@@ -10,7 +10,7 @@
 
 ###After
 
-Add post to INSTALLED_APPS tuple in your settings.py.
+You need add "post" app to INSTALLED_APPS tuple in your settings.py.
 
 The code above will generate a django app with model, views and urls path.
 

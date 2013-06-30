@@ -127,13 +127,30 @@ class Command(BaseCommand):
         with open(os.path.join(template_path, template_name.lower()), 'w' ) as tpl_file:
             tpl_file.write(u'{% load i18n %}\n')
             tpl_file.write(u'<h2>{klass}</h2>\n'.format(klass=klass))
-            tpl_file.write(u'\t<ul>\n')
-            tpl_file.write(u'{% for object in object_list %}\n')
+            tpl_file.write(u'\t<table>\n')
+            tpl_file.write(u'\t\t\t<thead>\n')
             _attrs = map(lambda attr: attr.split(':')[0], args)
+            tpl_file.write('\t\t\t\t<tr>\n')
             for attr in _attrs:
-                tpl_file.write(u'\t\t<li>{{ object.'+attr+' }}</li>\n')
-            tpl_file.write(u'{% endfor %}\n')
-            tpl_file.write(u'\t</ul>\n')
+                tpl_file.write(u'\t\t\t\t\t<th>'+attr.capitalize()+'</th>\n')
+            tpl_file.write(u'\t\t\t\t</tr>\n')
+            tpl_file.write(u'\t\t\t</thead>\n')
+            tpl_file.write(u'\t\t\t<tfoot>\n')
+            tpl_file.write(u'\t\t\t\t<tr>\n')
+            tpl_file.write(u'\t\t\t\t\t<td>\n')
+            tpl_file.write(u'\t\t\t\t\t\t<a href="{% url \''+klass.lower()+'_create_path\' %}">{% trans "Add" %}</a>\n')
+            tpl_file.write(u'\t\t\t\t\t<td>\n')
+            tpl_file.write(u'\t\t\t\t</tr>\n')
+            tpl_file.write(u'\t\t\t</tfoot>\n')
+            tpl_file.write(u'\t\t<tbody>\n')
+            tpl_file.write(u'\t\t\t{% for object in object_list %}\n')
+            for attr in _attrs:
+                tpl_file.write(u'\t\t\t\t<tr>\n')
+                tpl_file.write(u'\t\t\t\t\t<td><a href="{% url \''+klass.lower()+'_detail_path\' object.pk %}">{{ object.'+attr+' }}</a></td>\n')
+                tpl_file.write(u'\t\t\t\t</tr>\n')
+            tpl_file.write(u'\t\t\t{% endfor %}\n')
+            tpl_file.write(u'\t\t</tbody>\n')
+            tpl_file.write(u'\t</table>\n')
         tpl_file.close()
         return
 
@@ -148,8 +165,7 @@ class Command(BaseCommand):
             tpl_file.write(u'{% csrf_token %}\n')
             tpl_file.write(u'<input type="submit" value="{% trans \"Yes, I\'m sure\" %}"/>\n')
             tpl_file.write(u'</form>\n')
-            tpl_file.write(u'<a href="{0}{1} url \'{2}_index_path\' {1}{3}">{0}{1} trans "Back" {1}{3}</a>\n'.\
-                           format(chr(123), chr(37), klass.lower(), chr(125)))
+            tpl_file.write(u'<a href="{% url \''+klass.lower()+'_index_path\' %}">{% trans "Back" %}</a>\n')
             tpl_file.write('\n')
         tpl_file.close()
         return
@@ -162,8 +178,10 @@ class Command(BaseCommand):
             _attrs = map(lambda attr: attr.split(':')[0], args)
             for attr in _attrs:
                 tpl_file.write(u'<p>'+attr.capitalize()+': {{ object.'+attr+' }}</p>\n')
-            tpl_file.write(u'<a href="{0}{1} url \'{2}_index_path\' {1}{3}">{0}{1} trans "Back" {1}{3}</a>\n'.\
-                           format(chr(123), chr(37), klass.lower(), chr(125)))
+            tpl_file.write(u'<a href="{% url \''+klass.lower()+'_update_path\' object.pk %}">{% trans "Edit" %}</a></td>\n')
+            tpl_file.write(u'<a href="{% url \''+klass.lower()+'_delete_path\' object.pk %}">{% trans "Delete" %}</a></td>\n')
+            tpl_file.write(u'</br>')
+            tpl_file.write(u'<a href="{% url \''+klass.lower()+'_index_path\' %}">{% trans "Back" %}</a>\n')
             tpl_file.write('\n')
         tpl_file.close()
         return
@@ -177,7 +195,8 @@ class Command(BaseCommand):
             tpl_file.write(u'<h2>{klass}</h2>\n'.format(klass=klass))
             tpl_file.write(u'<form action="." method="post">\n')
             tpl_file.write(u'{% csrf_token %}\n')
-            tpl_file.write(u'\t{{ form.as_table }}\n')
+            tpl_file.write(u'{{ form.as_table }}\n')
+            tpl_file.write(u'</br>\n')
             tpl_file.write(u'<input type="submit" value="{% trans \"Save\" %}">\n')
             tpl_file.write(u'</form>')
         tpl_file.close()
