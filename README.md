@@ -8,6 +8,10 @@
 
     python manager.py scaffold post Post title:string body:text active:boolean
 
+###After
+
+Add post to INSTALLED_APPS tuple in your settings.py.
+
 The code above will generate a django app with model, views and urls path.
 
 The example above will create the codes and files bellow
