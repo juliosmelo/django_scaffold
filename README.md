@@ -1,4 +1,4 @@
-#Scaffold for DJANGO 1.5+ projects
+##Scaffold for DJANGO 1.5+ projects
 
 ###Instalation
 
@@ -12,7 +12,7 @@
 
 ###Usage
 
-    python manager.py scaffold post Post title:string body:text active:boolean
+    python manage.py scaffold post Post title:string body:text active:boolean
 
     post -> is name of new django app
     title, body, active -> are models attributes of model Post
