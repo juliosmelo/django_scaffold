@@ -21,6 +21,7 @@ class Command(BaseCommand):
             self.add_appurl_to_urlspy(app_name)
             self.create_adminpy(app_path, klass)
             self.create_list_view(app_path, klass, app_name, args)
+            self.create_form_view(app_path, klass, app_name)
             self.stdout.write('Done!')
         except OSError:
             raise CommandError('App already exists!')
@@ -65,11 +66,16 @@ class Command(BaseCommand):
     def create_views(self, app_path, klass):
         with open(os.path.join(app_path, 'views.py'), 'w') as view_file:
             view_file.write('from .models import {0}\n'.format(klass.capitalize()))
+            view_file.write('from django.core.urlresolvers import reverse_lazy\n')
             view_file.write('from django.views.generic import DetailView, ListView\n')
             view_file.write('from django.views.generic.edit import CreateView, UpdateView, DeleteView\n\n')
             for view in GENERIC_VIEWS:
                 view_file.write('class {0}{1}({2}):\n'.format(klass.capitalize(), view, view))
-                view_file.write(PEP8_INDENT+'model = {0}\n\n'.format(klass.capitalize()))
+                if view == "DeleteView":
+                    view_file.write(PEP8_INDENT+'model = {0}\n'.format(klass.capitalize()))
+                    view_file.write(PEP8_INDENT+"success_url = reverse_lazy('{0}_index_path')\n\n".format(klass.lower()))
+                else:
+                    view_file.write(PEP8_INDENT+'model = {0}\n\n'.format(klass.capitalize()))
         return
 
 
@@ -99,7 +105,7 @@ class Command(BaseCommand):
     def add_appurl_to_urlspy(self, app_name):
         #get project urls.py
         with open(os.path.join(os.getcwd(), self.project_name, 'urls.py'), 'a') as urlspy_file:
-            urlspy_file.write("urlpatterns += patterns('',\n{pep8}url(r'^{app}/', include('{app}.urls'))\n)".format(app=app_name, pep8=PEP8_INDENT))
+            urlspy_file.write("\nurlpatterns += patterns('',\n{pep8}url(r'^{app}/', include('{app}.urls'))\n)".format(app=app_name, pep8=PEP8_INDENT))
         urlspy_file.close()
         return
 
@@ -120,6 +126,24 @@ class Command(BaseCommand):
                 tpl_file.write('\t\t\t<li>{{ object.'+attr+' }}</li>\n')
             tpl_file.write('\t\t{% endfor %}\n')
             tpl_file.write('\t</ul>\n')
-            tpl_file.write("<a href={% url '{0}_create_path' %}>{% trans 'Save' %}</a>".format(app_name))
+            #tpl_file.write(
+            #    '''<a href="{% url '{0}_create_path' %}">{% trans "Save" %}</a>'''.format(app_name)
+            #)
+        tpl_file.close()
+        return
+
+    def create_delete_view(self, app_path, klass, app_name):
+        pass
+
+    def create_form_view(self, app_path, klass, app_name):
+        template_path = os.path.join(app_path, 'templates', app_name)
+        template_name = '{0}_form.html'.format(klass)
+        with open(os.path.join(template_path, template_name.lower()), 'w' ) as tpl_file:
+            tpl_file.write('<h2>{klass}</h2>\n'.format(klass=klass))
+            tpl_file.write('<form action="." method="post">\n')
+            tpl_file.write('{% csrf_token %}')
+            tpl_file.write('\t{{ form.as_table }}\n')
+            tpl_file.write('<input type="submit" value="Save">\n')
+            tpl_file.write('</form>')
         tpl_file.close()
         return
