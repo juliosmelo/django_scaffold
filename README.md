@@ -15,12 +15,15 @@
     python manager.py scaffold post Post title:string body:text active:boolean
 
     post -> is name of new django app
+    title, body, active -> are models attributes of model Post
 
     INSTALLED_APS = (
             ...
             'django_scaffold',
             'post',
             )
+
+    python manage.py syncdb
 
 The code above will generate a django app with model, views and urls path.
 
