@@ -175,6 +175,7 @@ class Command(BaseCommand):
         template_name = u'{0}_detail.html'.format(klass)
         with open(os.path.join(template_path, template_name.lower()), 'w' ) as tpl_file:
             tpl_file.write(u'{% load i18n %}\n')
+            tpl_file.write(u'<h1>{0}</h1>\n'.format(klass.capitalize()))
             _attrs = map(lambda attr: attr.split(':')[0], args)
             for attr in _attrs:
                 tpl_file.write(u'<p>'+attr.capitalize()+': {{ object.'+attr+' }}</p>\n')
