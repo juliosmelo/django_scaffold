@@ -13,7 +13,7 @@ setup(
         "django_scaffold.management",
         "django_scaffold.management.commands",
     ],
-    package_dir={"mailer": "mailer"},
+    package_dir={"django_scaffold": "django_scaffold"},
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Web Environment",
