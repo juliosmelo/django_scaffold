@@ -4,13 +4,23 @@
 
     pip install django_scaffold
 
+    #add in your projet
+    INSTALLED_APS = (
+            ...
+            'django_scaffold',
+            )
+
 ###Usage
 
     python manager.py scaffold post Post title:string body:text active:boolean
 
-###After
+    post -> is name of new django app
 
-You need add "post" app to INSTALLED_APPS tuple in your settings.py.
+    INSTALLED_APS = (
+            ...
+            'django_scaffold',
+            'post',
+            )
 
 The code above will generate a django app with model, views and urls path.
 
@@ -146,7 +156,7 @@ The example above will create the codes and files bellow
     </form>
     <a href="{% url 'email_index_path' %}">{% trans "Back" %}</a>
 
-> Append post.urls to root urls.py
+> Append post.urls to project urls.py
 
     urlpatterns += patterns('',
         url(r'^post/', include('post.urls'))
