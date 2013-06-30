@@ -123,8 +123,14 @@ The example above will create the codes and files bellow
 		<tbody>
 			{% for object in object_list %}
 				<tr>
-					<td><a href="{% url 'post_detail_path' object.pk %}">{{ object.email }}</a></td>
-					<td><a href="{% url 'post_detail_path' object.pk %}">{{ object.name }}</a></td>
+					<td><a href="{% url 'post_detail_path' object.pk
+                    %}">{{ object.created_at }}</a></td>
+					<td><a href="{% url 'post_detail_path' object.pk
+                    %}">{{ object.title }}</a></td>
+					<td><a href="{% url 'post_detail_path' object.pk
+                    %}">{{ object.body }}</a></td>
+					<td><a href="{% url 'post_detail_path' object.pk
+                    %}">{{ object.active }}</a></td>
 				</tr>
 			{% endfor %}
 		</tbody>
