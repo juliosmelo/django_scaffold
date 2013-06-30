@@ -23,6 +23,7 @@ class Command(BaseCommand):
             self.create_list_view(app_path, klass, app_name, args)
             self.create_form_view(app_path, klass, app_name)
             self.create_detail_view(app_path, klass, app_name, args)
+            self.create_delete_view(app_path, klass, app_name)
             self.stdout.write(u'Done!')
         except OSError:
             raise CommandError(u'App already exists!')
@@ -126,20 +127,32 @@ class Command(BaseCommand):
         with open(os.path.join(template_path, template_name.lower()), 'w' ) as tpl_file:
             tpl_file.write(u'{% load i18n %}\n')
             tpl_file.write(u'<h2>{klass}</h2>\n'.format(klass=klass))
-            tpl_file.write(u'{% for object in object_list %}\n')
             tpl_file.write(u'\t<ul>\n')
+            tpl_file.write(u'{% for object in object_list %}\n')
             _attrs = map(lambda attr: attr.split(':')[0], args)
             for attr in _attrs:
                 tpl_file.write(u'\t\t<li>{{ object.'+attr+' }}</li>\n')
-            tpl_file.write(u'\t</ul>\n')
             tpl_file.write(u'{% endfor %}\n')
+            tpl_file.write(u'\t</ul>\n')
         tpl_file.close()
         return
 
 
     def create_delete_view(self, app_path, klass, app_name):
-        pass
-
+        template_path = os.path.join(app_path, 'templates', app_name)
+        template_name = u'{0}_confirm_delete.html'.format(klass)
+        with open(os.path.join(template_path, template_name.lower()), 'w' ) as tpl_file:
+            tpl_file.write(u'{% load i18n %}\n')
+            tpl_file.write('<p>{% blocktrans with escaped_object=object %}Are you sure you want to delete the {{ object }} "{{ escaped_object }}"? {% endblocktrans %}</p>\n')
+            tpl_file.write(u'<form action="." method="post">\n')
+            tpl_file.write(u'{% csrf_token %}\n')
+            tpl_file.write(u'<input type="submit" value="{% trans \"Yes, I\'m sure\" %}"/>\n')
+            tpl_file.write(u'</form>\n')
+            tpl_file.write(u'<a href="{0}{1} url \'{2}_index_path\' {1}{3}">{0}{1} trans "Back" {1}{3}</a>\n'.\
+                           format(chr(123), chr(37), klass.lower(), chr(125)))
+            tpl_file.write('\n')
+        tpl_file.close()
+        return
 
     def create_detail_view(self, app_path, klass, app_name, args):
         template_path = os.path.join(app_path, 'templates', app_name)
@@ -163,10 +176,9 @@ class Command(BaseCommand):
             tpl_file.write(u'{% load i18n %}\n')
             tpl_file.write(u'<h2>{klass}</h2>\n'.format(klass=klass))
             tpl_file.write(u'<form action="." method="post">\n')
-            tpl_file.write(u'{0}{1} csrf_token {1}{2}\n'.format(chr(123), chr(37), chr(125)))
+            tpl_file.write(u'{% csrf_token %}\n')
             tpl_file.write(u'\t{{ form.as_table }}\n')
-            tpl_file.write(u'<input type="submit" value="{% trans \'Save\' %}">\n')
+            tpl_file.write(u'<input type="submit" value="{% trans \"Save\" %}">\n')
             tpl_file.write(u'</form>')
         tpl_file.close()
-        return
         return
