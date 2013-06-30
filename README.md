@@ -99,7 +99,36 @@ The example above will create the codes and files bellow
         {{ form.as_table }}
     <input type="submit" value="{% trans "Save" %}"/>
     </form>
+
 >post/templates/post/post_list.html
+
+    {% load i18n %}
+    <h2>People</h2>
+	<table>
+			<thead>
+				<tr>
+					<th>Created_at</th>
+					<th>Title</th>
+					<th>Body</th>
+					<th>Active</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<td>
+						<a href="{% url 'post_create_path' %}">{% trans "Add" %}</a>
+					<td>
+				</tr>
+			</tfoot>
+		<tbody>
+			{% for object in object_list %}
+				<tr>
+					<td><a href="{% url 'post_detail_path' object.pk %}">{{ object.email }}</a></td>
+					<td><a href="{% url 'post_detail_path' object.pk %}">{{ object.name }}</a></td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	  </table>
 
 >post/templates/post/post_confirm_delete.html
 
@@ -111,6 +140,11 @@ The example above will create the codes and files bellow
     </form>
     <a href="{% url 'email_index_path' %}">{% trans "Back" %}</a>
 
+> Append post.urls to root urls.py
+
+    urlpatterns += patterns('',
+        url(r'^post/', include('post.urls'))
+    )
 
 ###Contribute
 1. Fork it!

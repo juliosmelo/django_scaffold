@@ -139,7 +139,7 @@ class Command(BaseCommand):
             tpl_file.write(u'\t\t\t\t<tr>\n')
             tpl_file.write(u'\t\t\t\t\t<td>\n')
             tpl_file.write(u'\t\t\t\t\t\t<a href="{% url \''+klass.lower()+'_create_path\' %}">{% trans "Add" %}</a>\n')
-            tpl_file.write(u'\t\t\t\t\t<td>\n')
+            tpl_file.write(u'\t\t\t\t\t</td>\n')
             tpl_file.write(u'\t\t\t\t</tr>\n')
             tpl_file.write(u'\t\t\t</tfoot>\n')
             tpl_file.write(u'\t\t<tbody>\n')
@@ -166,7 +166,6 @@ class Command(BaseCommand):
             tpl_file.write(u'<input type="submit" value="{% trans \"Yes, I\'m sure\" %}"/>\n')
             tpl_file.write(u'</form>\n')
             tpl_file.write(u'<a href="{% url \''+klass.lower()+'_index_path\' %}">{% trans "Back" %}</a>\n')
-            tpl_file.write('\n')
         tpl_file.close()
         return
 
@@ -183,7 +182,6 @@ class Command(BaseCommand):
             tpl_file.write(u'<a href="{% url \''+klass.lower()+'_delete_path\' object.pk %}">{% trans "Delete" %}</a></td>\n')
             tpl_file.write(u'</br>')
             tpl_file.write(u'<a href="{% url \''+klass.lower()+'_index_path\' %}">{% trans "Back" %}</a>\n')
-            tpl_file.write('\n')
         tpl_file.close()
         return
 
