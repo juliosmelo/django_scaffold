@@ -97,6 +97,7 @@ class Command(BaseCommand):
             urls_file.write('from .views import {0}\n\n'.format((', ').join(generic_views)))
             urls_file.write("urlpatterns = patterns('', \n")
             for k,v in URLS_PATH.items():
+                #TODO alterar para urls com nome da classe
                 urls_file.write(PEP8_INDENT+"url(r'{app}/{url}', {klass}{gview}.as_view(), name='{app}_{url_name}'),\n".format(app=app_name, klass=klass.capitalize(), gview=k, url=v['url'], url_name=v['name']))
             urls_file.write(')\n')
         urls_file.close()
@@ -135,15 +136,18 @@ class Command(BaseCommand):
     def create_delete_view(self, app_path, klass, app_name):
         pass
 
+    def create_detail_view(self, app_path, klass, app_name):
+        pass
+
     def create_form_view(self, app_path, klass, app_name):
         template_path = os.path.join(app_path, 'templates', app_name)
         template_name = '{0}_form.html'.format(klass)
         with open(os.path.join(template_path, template_name.lower()), 'w' ) as tpl_file:
-            tpl_file.write('<h2>{klass}</h2>\n'.format(klass=klass))
-            tpl_file.write('<form action="." method="post">\n')
-            tpl_file.write('{% csrf_token %}')
-            tpl_file.write('\t{{ form.as_table }}\n')
-            tpl_file.write('<input type="submit" value="Save">\n')
-            tpl_file.write('</form>')
+            tpl_file.write(u'<h2>{klass}</h2>\n'.format(klass=klass))
+            tpl_file.write(u'<form action="." method="post">\n')
+            tpl_file.write(u'{0}{1} csrf_token {1}{2}\n'.format(chr(123), chr(37), chr(125)))
+            tpl_file.write(u'\t{{ form.as_table }}\n')
+            tpl_file.write(u'<input type="submit" value="Save">\n')
+            tpl_file.write(u'</form>')
         tpl_file.close()
         return
