@@ -22,6 +22,7 @@ class Command(BaseCommand):
             self.create_adminpy(app_path, klass)
             self.create_list_view(app_path, klass, app_name, args)
             self.create_form_view(app_path, klass, app_name)
+            self.create_detail_view(app_path, klass, app_name)
             self.stdout.write('Done!')
         except OSError:
             raise CommandError('App already exists!')
@@ -36,6 +37,7 @@ class Command(BaseCommand):
             form_file.write(PEP8_INDENT*2+'model={0}\n'.format(klass.capitalize()))
         form_file.close()
         return
+
 
     def create_model(self, app_path, klass, attrs):
         with open(os.path.join(app_path, 'models.py'), 'w') as model_file:
@@ -54,6 +56,7 @@ class Command(BaseCommand):
         model_file.close()
         return
 
+
     def create_project_scaffold(self, app_path, app_name):
         folders=['static/{0}/css/'.format(app_name),'static/{0}/javascript'.format(app_name.lower()),
                  'static/{0}/images'.format(app_name), 'templates/{0}'.format(app_name.lower())]
@@ -62,6 +65,7 @@ class Command(BaseCommand):
         with open(os.path.join(app_path, '__init__.py'), 'w') as f:
             f.close()
         return
+
 
     def create_views(self, app_path, klass):
         with open(os.path.join(app_path, 'views.py'), 'w') as view_file:
@@ -88,7 +92,6 @@ class Command(BaseCommand):
         return
 
 
-
     def create_urls(self, app_path, app_name, klass):
         with open(os.path.join(app_path, 'urls.py'), 'w') as urls_file:
             urls_file.write('from django.conf.urls import patterns, url\n')
@@ -103,6 +106,7 @@ class Command(BaseCommand):
         urls_file.close()
         return
 
+
     def add_appurl_to_urlspy(self, app_name):
         #get project urls.py
         with open(os.path.join(os.getcwd(), self.project_name, 'urls.py'), 'a') as urlspy_file:
@@ -110,8 +114,10 @@ class Command(BaseCommand):
         urlspy_file.close()
         return
 
+
     def get_field_type(self, ftype):
         return FIELD_TYPES.get(ftype)
+
 
     #views
     def create_list_view(self, app_path, klass, app_name, args):
@@ -120,24 +126,32 @@ class Command(BaseCommand):
         with open(os.path.join(template_path, template_name.lower()), 'w' ) as tpl_file:
             tpl_file.write('{% load i18n %}\n')
             tpl_file.write('<h2>{klass}</h2>\n'.format(klass=klass))
-            tpl_file.write('\t<ul syle="list-style:inline;">\n')
-            tpl_file.write('\t\t{% for object in object_list %}\n')
+            tpl_file.write('{% for object in object_list %}\n')
+            tpl_file.write('\t<ul>\n')
             _attrs = map(lambda attr: attr.split(':')[0], args)
             for attr in _attrs:
-                tpl_file.write('\t\t\t<li>{{ object.'+attr+' }}</li>\n')
-            tpl_file.write('\t\t{% endfor %}\n')
+                tpl_file.write('\t\t<li>{{ object.'+attr+' }}</li>\n')
             tpl_file.write('\t</ul>\n')
+            tpl_file.write('{% endfor %}\n')
             #tpl_file.write(
             #    '''<a href="{% url '{0}_create_path' %}">{% trans "Save" %}</a>'''.format(app_name)
             #)
         tpl_file.close()
         return
 
+
     def create_delete_view(self, app_path, klass, app_name):
         pass
 
+
     def create_detail_view(self, app_path, klass, app_name):
-        pass
+        template_path = os.path.join(app_path, 'templates', app_name)
+        template_name = '{0}_detail.html'.format(klass)
+        with open(os.path.join(template_path, template_name.lower()), 'w' ) as tpl_file:
+            tpl_file.write('{{ object }}\n')
+        tpl_file.close()
+        return
+
 
     def create_form_view(self, app_path, klass, app_name):
         template_path = os.path.join(app_path, 'templates', app_name)
