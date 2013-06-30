@@ -80,11 +80,32 @@ The example above will create the codes and files bellow
 
 >post/templates/post/post_detail.html
 
+    {% load i18n %}
+    <p>Created_at: {{ object.created_at }}</p>
+    <p>Title: {{ object.title }}</p>
+    <p>Body: {{ object.body }}</p>
+    <p>Active: {{ object.active }}</p>
+
 >post/templates/post/post_form.html
 
+    {% load i18n %}
+    <h2>Post</h2>
+    <form action="." method="post">
+    {% csrf_token %}
+        {{ form.as_table }}
+    <input type="submit" value="{% trans "Save" %}"/>
+    </form>
 >post/templates/post/post_list.html
 
 >post/templates/post/post_confirm_delete.html
+
+    {% load i18n %}
+    <p>{% blocktrans with escaped_object=object %}Are you sure you want to delete the {{ object }} "{{ escaped_object }}"? {% endblocktrans %}</p>
+    <form action="." method="post">
+    {% csrf_token %}
+    <input type="submit" value="{% trans "Yes, I'm sure" %}"/>
+    </form>
+    <a href="{% url 'email_index_path' %}">{% trans "Back" %}</a>
 
 
 ###Contribute
