@@ -1,4 +1,4 @@
-#Awesome scaffold for DJANGO 1.5+ projects
+#Scaffold for DJANGO 1.5+ projects
 
 ###Instalation
 
