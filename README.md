@@ -153,7 +153,7 @@ The example above will create the codes and files bellow
     )
 
 ###Contribute
-1. Fork it!
+1. Fork!
 2. Do things!
 3. pull request!
 
